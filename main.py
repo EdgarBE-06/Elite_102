@@ -1,12 +1,5 @@
-vowels = ["a","e","i","o","u"]
-word = input("Enter a word")
+def welcome_message():
+    name = input("Hey there sport what's your name?")
+    print(f"Hi {name} how's your day been")
 
-def vowels(string):
-    vowel_counter = []
-    for character in string:
-        if character in vowels:
-            vowel_counter += 1
-    return vowel_counter
-
-
-vowels(word)
+welcome_message()
