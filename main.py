@@ -1,23 +1,21 @@
 import mysql.connector
 
-def welcome_message():
-    name = input("Hey there sport what's your name?")
-    print(f"Hi {name} how's your day been")
-
-welcome_message()
-
 connection = mysql.connector.connect(
     user = 'root',
     database = 'bank_account',
     password = 'password'
 )
 
-cursor = connection.cursor()
-testQuery = ("SELECT * FROM user_account")
-cursor.execute(testQuery)
+def welcome_message():
+    name = input("What's your name?")
+    cursor = connection.cursor()
+    testQuery = ("SELECT * FROM user_account WHERE balance > 50")
+    cursor.execute(testQuery)
 
-for item in cursor:
-    print(item)
+    for item in cursor:
+       print(item)
 
-cursor.close()
-connection.close()
+    cursor.close()
+    connection.close()
+
+welcome_message()
