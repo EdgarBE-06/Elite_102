@@ -9,7 +9,7 @@ connection = mysql.connector.connect(
 def welcome_message():
     name = input("What's your name?")
     cursor = connection.cursor()
-    testQuery = ("SELECT * FROM user_account WHERE balance > 50")
+    testQuery = (f"SELECT * FROM user_account WHERE name = '{name}'")
     cursor.execute(testQuery)
 
     for item in cursor:
