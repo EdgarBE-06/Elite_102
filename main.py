@@ -17,7 +17,7 @@ def table():
     cursor.close()
     
 def check_balance():
-    cname = input("What's your name")
+    cname = input("What's your name ")
     cursor = connection.cursor()
     testQuery = (f"SELECT balance FROM user_account WHERE name = '{cname}' ")
     cursor.execute(testQuery)
@@ -71,7 +71,18 @@ def Withdrawl():
       connection.commit()
       cursor.close()
       
-
+def Modifying_account():
+    mod_name = input("What's your name ")
+    cursor = connection.cursor()
+    mod_choice = input("Would you like to change your name, email, or password")
+    if mod_choice == 'name':
+        new_name = input("What do you want to change your name to ")
+        name_change = (f"UPDATE user_account SET name = '{new_name}' WHERE name = '{mod_name}'")
+        cursor.execute(name_change)
+    elif mod_choice == 'email':
+        new_email = input("What's your new email ")
+        email_change = (f"UPDATE user_account SET name = '{new_email}' WHERE name = '{mod_name}'")
+        cursor.execute(email_change)
    
 
    
