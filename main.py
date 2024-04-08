@@ -16,7 +16,17 @@ def table():
 
     cursor.close()
     
-    
+def check_balance():
+    cname = input("What's your name")
+    cursor = connection.cursor()
+    testQuery = (f"SELECT balance FROM user_account WHERE name = '{cname}' ")
+    cursor.execute(testQuery)
+
+    for item in cursor:
+        print(item)
+    cursor.close()
+
+
 def create_account():
    aname = input("What's your name ")
    aemail = input("What's your email ")
@@ -65,3 +75,5 @@ def Withdrawl():
    
 
    
+table()
+check_balance()
