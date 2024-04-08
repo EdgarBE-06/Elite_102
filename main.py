@@ -79,12 +79,31 @@ def Modifying_account():
         new_name = input("What do you want to change your name to ")
         name_change = (f"UPDATE user_account SET name = '{new_name}' WHERE name = '{mod_name}'")
         cursor.execute(name_change)
+
+        connection.commit()
+        cursor.close()
+
     elif mod_choice == 'email':
         new_email = input("What's your new email ")
-        email_change = (f"UPDATE user_account SET name = '{new_email}' WHERE name = '{mod_name}'")
+        email_change = (f"UPDATE user_account SET email = '{new_email}' WHERE name = '{mod_name}'")
         cursor.execute(email_change)
+
+        connection.commit()
+        cursor.close()
+
+    elif mod_choice == 'password':
+        new_password = input("Please enter your new password ")
+        password_change = (f"UPDATE user_account SET password = '{new_password}' WHERE name = '{mod_name}'")
+        cursor.execute(password_change)
+
+        connection.commit()
+        cursor.close()
+    else:
+        Modifying_account()
+
    
 
    
 table()
-check_balance()
+Modifying_account()
+table()
