@@ -7,14 +7,6 @@ connection = mysql.connector.connect(
 )
 
 def main():
-    cd = input("Would you like to create or delete an account")
-    if cd == 'create':
-       create_account()
-    elif cd == 'delete':
-       delete_account()
-    else:
-       print("That's not an option")
-
     cursor = connection.cursor()
     testQuery = ("SELECT * FROM user_account")
     cursor.execute(testQuery)
@@ -26,8 +18,12 @@ def main():
     connection.close()
     
 def create_account():
+   aname = input("What's your name ")
+   aemail = input("What's your email ")
+   apassword = input("What's your password ")
+   abalance = 0
    cursor2 = connection.cursor()
-   addData = ("INSERT INTO user_account (name, email, password, balance)VALUES ('John','Ree@gmail.com','hoho', 0)")
+   addData = (f"INSERT INTO user_account (name, email, password, balance)VALUES ('{aname}','{aemail}','{apassword}', {abalance})")
    cursor2.execute(addData)
 
    connection.commit()
@@ -37,11 +33,11 @@ def create_account():
 def delete_account():
    dname = input("What is the name of your account")
    cursor3 = connection.cursor()
-   addData = (f"DELETE FROM user_account WHERE name = {dname}")
+   addData = ("DELETE FROM user_account")
    cursor3.execute(addData)
 
    connection.commit()
    cursor3.close()
    connection.close()
 
-main()
+create_account()
