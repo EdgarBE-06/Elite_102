@@ -6,6 +6,26 @@ connection = mysql.connector.connect(
     password = 'password'
 )
 
+
+
+def main():
+    choice = input("What would you like to do")
+    if choice == 'create an account':
+        create_account()
+    elif choice == 'delete my account':
+        delete_account()
+    elif choice == 'check my balance':
+        check_balance()
+    elif choice == 'make a deposit':
+        Deposit()
+    elif choice == 'make a withdrawl':
+        Withdrawl()
+    elif choice == 'modify my account':
+        Modifying_account()
+    else:
+        main()
+
+
 def table():
     cursor = connection.cursor()
     testQuery = ("SELECT * FROM user_account")
@@ -26,7 +46,6 @@ def check_balance():
         print(item)
     cursor.close()
 
-
 def create_account():
    aname = input("What's your name ")
    aemail = input("What's your email ")
@@ -39,7 +58,6 @@ def create_account():
    connection.commit()
    cursor.close()
    
-
 def delete_account():
    dname = input("What's your name ")
    cursor = connection.cursor()
@@ -49,7 +67,6 @@ def delete_account():
    connection.commit()
    cursor.close()
    
-
 def Deposit():
       depo_name = input("What's your name ")
       cursor = connection.cursor()
@@ -60,7 +77,6 @@ def Deposit():
       connection.commit()
       cursor.close()
    
-
 def Withdrawl():
       with_name = input("What's your name ")
       cursor = connection.cursor()
@@ -74,7 +90,7 @@ def Withdrawl():
 def Modifying_account():
     mod_name = input("What's your name ")
     cursor = connection.cursor()
-    mod_choice = input("Would you like to change your name, email, or password")
+    mod_choice = input("Would you like to change your name, email, or password ")
     if mod_choice == 'name':
         new_name = input("What do you want to change your name to ")
         name_change = (f"UPDATE user_account SET name = '{new_name}' WHERE name = '{mod_name}'")
@@ -101,9 +117,5 @@ def Modifying_account():
     else:
         Modifying_account()
 
-   
-
-   
-table()
-Modifying_account()
+main()
 table()
