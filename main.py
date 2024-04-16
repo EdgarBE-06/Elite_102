@@ -1,4 +1,19 @@
 import mysql.connector
+import tkinter as tk
+
+
+#create window
+#window = tk.Tk()
+
+#provide size to window
+#window.geometry("700x700")
+
+#add text label
+#tk.Label(text="Hello from Educative !!!").pack()
+
+
+
+#window.mainloop()
 
 connection = mysql.connector.connect(
     user = 'root',
@@ -9,6 +24,8 @@ connection = mysql.connector.connect(
 
 
 def main():
+    global name
+    name = input("What is your name")
     choice = input("What would you like to do")
     if choice == 'create an account':
         create_account()
@@ -26,6 +43,8 @@ def main():
         main()
 
 
+
+
 def table():
     cursor = connection.cursor()
     testQuery = ("SELECT * FROM user_account")
@@ -37,9 +56,8 @@ def table():
     cursor.close()
     
 def check_balance():
-    cname = input("What's your name ")
     cursor = connection.cursor()
-    testQuery = (f"SELECT balance FROM user_account WHERE name = '{cname}' ")
+    testQuery = (f"SELECT balance FROM user_account WHERE name = '{name}' ")
     cursor.execute(testQuery)
 
     for item in cursor:
@@ -59,36 +77,32 @@ def create_account():
    cursor.close()
    
 def delete_account():
-   dname = input("What's your name ")
    cursor = connection.cursor()
-   addData = (f"DELETE FROM user_account WHERE name = '{dname}'")
+   addData = (f"DELETE FROM user_account WHERE name = '{name}'")
    cursor.execute(addData)
 
    connection.commit()
    cursor.close()
    
 def Deposit():
-      depo_name = input("What's your name ")
       cursor = connection.cursor()
       deposit_amount = int(input("How much would you like to deposit"))
-      deposit = (f"UPDATE user_account SET balance = balance + {deposit_amount} WHERE name = '{depo_name}';")
+      deposit = (f"UPDATE user_account SET balance = balance + {deposit_amount} WHERE name = '{name}';")
       cursor.execute(deposit)
 
       connection.commit()
       cursor.close()
    
 def Withdrawl():
-      with_name = input("What's your name ")
       cursor = connection.cursor()
       withdrawl_amount = int(input("How much would you like to withdrawl"))
-      withdrawl = (f"UPDATE user_account SET balance = balance - {withdrawl_amount} WHERE name = '{with_name}';")
+      withdrawl = (f"UPDATE user_account SET balance = balance - {withdrawl_amount} WHERE name = '{name}';")
       cursor.execute(withdrawl)
 
       connection.commit()
       cursor.close()
       
 def Modifying_account():
-    mod_name = input("What's your name ")
     cursor = connection.cursor()
     mod_choice = input("Would you like to change your name, email, or password ")
     if mod_choice == 'name':
