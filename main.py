@@ -2,16 +2,20 @@ import mysql.connector
 import tkinter as tk
 
 
-#create window
-#window = tk.Tk()
-
-#provide size to window
-#window.geometry("700x700")
-
-#add text label
-#tk.Label(text="Hello from Educative !!!").pack()
-
-
+# create a tkinter window
+root = Tk()              
+ 
+# Open window having dimension 100x100
+root.geometry('100x100') 
+ 
+# Create a Button
+btn = Button(root, text = 'Click me !', bd = '5',
+                          command = root.destroy) 
+ 
+# Set the position of button on the top of window.   
+btn.pack(side = 'top')    
+ 
+root.mainloop()
 
 #window.mainloop()
 
@@ -57,7 +61,7 @@ def table():
     
 def check_balance():
     cursor = connection.cursor()
-    testQuery = (f"SELECT balance FROM user_account WHERE name = '{name}' ")
+    testQuery = (f"SELECT balance FROM user_account WHERE name = '{name}'")
     cursor.execute(testQuery)
 
     for item in cursor:
