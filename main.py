@@ -30,35 +30,45 @@ connection = mysql.connector.connect(
 
 def main():
       login()
-      choice = input("What would you like to do \n 1.Delete my account \n 2.Check acccount Balance \n 3.Make a Withdrawl \n 4.Make a Deposit \n 5.Modify Account")
+      keep = 'Yes'
+      while keep == 'Yes':
+        choice = input("What would you like to do \n 1.Delete my account \n 2.Check acccount Balance \n 3.Make a Withdrawl \n 4.Make a Deposit \n 5.Modify Account ")
       
-      if choice == '1':
-          print("delete")
-          delete_account()
-      elif choice == '2':
-          print("check")
-          check_balance()
-      elif choice == '3':
-          print("Withdrawl")
-          Withdrawl()
-      elif choice == '4':
-          print('Deposit')
-          Deposit()
-      elif choice == '5':
-          print("Modify")
-          Modifying_account()
-      else:
-        print("Table")
-        table()
+        if choice == '1':
+            print("delete")
+            delete_account()
+            keep = input("Would you like to continue")
+        elif choice == '2':
+            print("check")
+            check_balance()
+            keep = input("Would you like to continue")
+        elif choice == '3':
+            print("Withdrawl")
+            Withdrawl()
+            keep = input("Would you like to continue")
+        elif choice == '4':
+            print('Deposit')
+            Deposit()
+            keep = input("Would you like to continue")
+        elif choice == '5':
+           print("Modify")
+           Modifying_account()
+           keep = input("Would you like to continue")
+        else:
+          print("Table")
+          table()
+          keep = 'No'
 
 def login():
-    choice = input("1.Login \n2.Create an account")
+    choice = input("1.Login \n2.Create an account ")
     
     if choice == '1':
         global name
         name = input("Enter your name ")
         global password
         password = input("Enter your password ")
+
+        
     elif choice == '2':
        create_account()
     else:
