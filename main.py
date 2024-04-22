@@ -1,23 +1,24 @@
 import mysql.connector
 import tkinter as tk
+from tkinter import *
+from tkinter import messagebox
+from tkinter.simpledialog import askstring
 
+#top = Tk()
 
-# create a tkinter window
-root = Tk()              
- 
-# Open window having dimension 100x100
-root.geometry('100x100') 
- 
-# Create a Button
-btn = Button(root, text = 'Click me !', bd = '5',
-                          command = root.destroy) 
- 
-# Set the position of button on the top of window.   
-btn.pack(side = 'top')    
- 
-root.mainloop()
+#top.geometry("100x100")
+#def show():
+   #global name
+  # name = askstring("Input", "Enter your name")
+  # global password
+  # password = askstring("Input", "Enter your password")
+  # print(name, password)
+   
+   
+#B = Button(top, text ="Click", command = show)
+#B.place(x=50,y=50)
 
-#window.mainloop()
+#top.mainloop()
 
 connection = mysql.connector.connect(
     user = 'root',
@@ -28,24 +29,40 @@ connection = mysql.connector.connect(
 
 
 def main():
-    global name
-    name = input("What is your name")
-    choice = input("What would you like to do")
-    if choice == 'create an account':
-        create_account()
-    elif choice == 'delete my account':
-        delete_account()
-    elif choice == 'check my balance':
-        check_balance()
-    elif choice == 'make a deposit':
-        Deposit()
-    elif choice == 'make a withdrawl':
-        Withdrawl()
-    elif choice == 'modify my account':
-        Modifying_account()
-    else:
-        main()
+      login()
+      choice = input("What would you like to do \n 1.Delete my account \n 2.Check acccount Balance \n 3.Make a Withdrawl \n 4.Make a Deposit \n 5.Modify Account")
+      
+      if choice == '1':
+          print("delete")
+          delete_account()
+      elif choice == '2':
+          print("check")
+          check_balance()
+      elif choice == '3':
+          print("Withdrawl")
+          Withdrawl()
+      elif choice == '4':
+          print('Deposit')
+          Deposit()
+      elif choice == '5':
+          print("Modify")
+          Modifying_account()
+      else:
+        print("Table")
+        table()
 
+def login():
+    choice = input("1.Login \n2.Create an account")
+    
+    if choice == '1':
+        global name
+        name = input("Enter your name ")
+        global password
+        password = input("Enter your password ")
+    elif choice == '2':
+       create_account()
+    else:
+        table()
 
 
 
@@ -61,7 +78,7 @@ def table():
     
 def check_balance():
     cursor = connection.cursor()
-    testQuery = (f"SELECT balance FROM user_account WHERE name = '{name}'")
+    testQuery = (f"SELECT balance FROM user_account WHERE name = '{name}' and password = '{password}")
     cursor.execute(testQuery)
 
     for item in cursor:
@@ -82,7 +99,7 @@ def create_account():
    
 def delete_account():
    cursor = connection.cursor()
-   addData = (f"DELETE FROM user_account WHERE name = '{name}'")
+   addData = (f"DELETE FROM user_account WHERE name = '{name}' and password = '{password}'")
    cursor.execute(addData)
 
    connection.commit()
@@ -111,7 +128,7 @@ def Modifying_account():
     mod_choice = input("Would you like to change your name, email, or password ")
     if mod_choice == 'name':
         new_name = input("What do you want to change your name to ")
-        name_change = (f"UPDATE user_account SET name = '{new_name}' WHERE name = '{mod_name}'")
+        name_change = (f"UPDATE user_account SET name = '{new_name}' WHERE name = '{name}'")
         cursor.execute(name_change)
 
         connection.commit()
@@ -119,7 +136,7 @@ def Modifying_account():
 
     elif mod_choice == 'email':
         new_email = input("What's your new email ")
-        email_change = (f"UPDATE user_account SET email = '{new_email}' WHERE name = '{mod_name}'")
+        email_change = (f"UPDATE user_account SET email = '{new_email}' WHERE name = '{name}'")
         cursor.execute(email_change)
 
         connection.commit()
@@ -127,7 +144,7 @@ def Modifying_account():
 
     elif mod_choice == 'password':
         new_password = input("Please enter your new password ")
-        password_change = (f"UPDATE user_account SET password = '{new_password}' WHERE name = '{mod_name}'")
+        password_change = (f"UPDATE user_account SET password = '{new_password}' WHERE name = '{name}'")
         cursor.execute(password_change)
 
         connection.commit()
@@ -136,4 +153,3 @@ def Modifying_account():
         Modifying_account()
 
 main()
-table()
