@@ -1,24 +1,74 @@
 import mysql.connector
-import tkinter as tk
+import tkinter
 from tkinter import *
-from tkinter import messagebox
-from tkinter.simpledialog import askstring
 
-#top = Tk()
 
-#top.geometry("100x100")
-#def show():
-   #global name
-  # name = askstring("Input", "Enter your name")
-  # global password
-  # password = askstring("Input", "Enter your password")
-  # print(name, password)
-   
-   
-#B = Button(top, text ="Click", command = show)
-#B.place(x=50,y=50)
+window = Tk()
 
-#top.mainloop()
+
+def login():
+  window.geometry("400x300")
+
+  label_1 = Label(window, text = "Username")
+  label_1.place(x=100,y=75)
+
+  label_2 = Label(window, text = "Password")
+  label_2.place(x=100,y=100)
+
+  global name
+  name = Entry()
+  name.place(x=175, y=75)
+
+  global password
+  password = Entry()
+  password.place(x=175, y=100)
+
+  btn_1 = Button(window, text = "Login")
+  btn_1.place(x=175,y=125)
+
+  btn_2 = Button(window, text = "Sign up", command= lambda: create_account_window())
+  btn_2.place(x= 225,y= 125)
+
+  window.mainloop()
+
+def create_account_window():
+    second = Toplevel()
+    second.title("Sign up page")
+    second.geometry("400x300")
+
+    clabel_1 = Label(second, text ="Username")
+    clabel_1.place(x=100,y=75)
+    abname = Entry(second)
+    abname.place(x=175,y=75)
+
+    clabel_2 = Label(second, text ="Email")
+    clabel_2.place(x=100,y = 100)
+    abemail = Entry(second)
+    abemail.place(x=175,y=100)
+    
+    clabel_3 = Label(second, text="Password")
+    clabel_3.place(x=100,y = 125)
+    abpassword = Entry(second)
+    abpassword.place(x=175,y=125)
+
+    exit_button = Button(second, text="Confirm", command= lambda: create_account(abname, abemail, abpassword)) 
+    exit_button.place(x= 175,y= 150) 
+  
+
+
+def create_account(abname, abemail, abpassword):
+   aname = abname.get()
+   aemail = abemail.get()
+   apassword = abpassword.get()
+   abalance = 0
+   cursor = connection.cursor()
+   addData = (f"INSERT INTO user_account (name, email, password, balance)VALUES ('{aname}','{aemail}','{apassword}', {abalance})")
+   cursor.execute(addData)
+
+   connection.commit()
+   cursor.close()
+
+
 
 connection = mysql.connector.connect(
     user = 'root',
@@ -29,6 +79,7 @@ connection = mysql.connector.connect(
 
 
 def main():
+      
       login()
       keep = 'Yes'
       while keep == 'Yes':
@@ -58,23 +109,8 @@ def main():
           print("Table")
           table()
           keep = 'No'
-
-def login():
-    choice = input("1.Login \n2.Create an account ")
-    
-    if choice == '1':
-        global name
-        name = input("Enter your name ")
-        global password
-        password = input("Enter your password ")
-
-        
-    elif choice == '2':
-       create_account()
-    else:
-        table()
-
-
+      print("Have a good Day")
+      table()
 
 def table():
     cursor = connection.cursor()
@@ -94,22 +130,10 @@ def check_balance():
     for item in cursor:
         print(item)
     cursor.close()
-
-def create_account():
-   aname = input("What's your name ")
-   aemail = input("What's your email ")
-   apassword = input("What's your password ")
-   abalance = 0
-   cursor = connection.cursor()
-   addData = (f"INSERT INTO user_account (name, email, password, balance)VALUES ('{aname}','{aemail}','{apassword}', {abalance})")
-   cursor.execute(addData)
-
-   connection.commit()
-   cursor.close()
    
 def delete_account():
    cursor = connection.cursor()
-   addData = (f"DELETE FROM user_account WHERE name = '{name}' and password = '{password}'")
+   addData = (f"DELETE FROM user_account WHERE id >= 18")
    cursor.execute(addData)
 
    connection.commit()
@@ -162,4 +186,5 @@ def Modifying_account():
     else:
         Modifying_account()
 
-main()
+login()
+table()
