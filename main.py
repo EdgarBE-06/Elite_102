@@ -2,6 +2,11 @@ import mysql.connector
 import tkinter
 from tkinter import *
 
+connection = mysql.connector.connect(
+    user = 'root',
+    database = 'bank_account',
+    password = 'password'
+)
 
 window = Tk()
 
@@ -10,10 +15,10 @@ def login():
   window.geometry("400x300")
 
   label_1 = Label(window, text = "Username")
-  label_1.place(x=100,y=75)
+  label_1.place(x=115,y=75)
 
   label_2 = Label(window, text = "Password")
-  label_2.place(x=100,y=100)
+  label_2.place(x=115,y=100)
 
   global name
   name = Entry()
@@ -23,7 +28,7 @@ def login():
   password = Entry()
   password.place(x=175, y=100)
 
-  btn_1 = Button(window, text = "Login")
+  btn_1 = Button(window, text = "Login", command= lambda: create_main_page())
   btn_1.place(x=175,y=125)
 
   btn_2 = Button(window, text = "Sign up", command= lambda: create_account_window())
@@ -51,11 +56,9 @@ def create_account_window():
     abpassword = Entry(second)
     abpassword.place(x=175,y=125)
 
-    exit_button = Button(second, text="Confirm", command= lambda: create_account(abname, abemail, abpassword)) 
-    exit_button.place(x= 175,y= 150) 
+    confirm = Button(second, text="Confirm", command= lambda: [create_account(abname, abemail, abpassword), abname.delete, abemail.delete, abpassword.delete]) 
+    confirm.place(x= 175,y= 150) 
   
-
-
 def create_account(abname, abemail, abpassword):
    aname = abname.get()
    aemail = abemail.get()
@@ -68,13 +71,59 @@ def create_account(abname, abemail, abpassword):
    connection.commit()
    cursor.close()
 
+def check_balance():
+    cursor = connection.cursor()
+    testQuery = (f"SELECT balance FROM user_account WHERE name = '{name.get()}' and password = '{password.get()}")
+    cursor.execute(testQuery)
+
+    for item in cursor:
+        print(item)
+    cursor.close()
+   
+def create_main_page():
+    third = Toplevel()
+    third.title("Main Page")
+    third.geometry("400x300")
+
+    deposit_button = Button(third, text = "Deposit", command= lambda: Deposit(adeposit_amount), height =8, width= 16)
+    deposit_button.place(x=85,y=150)
+
+    withdrawl_button = Button(third, text = "Withdrawl", command= lambda: Withdrawl(awithdrawl_amount), height= 8, width= 16)
+    withdrawl_button.place(x=210,y=150)
+
+    account_page_button = Button(third, text = "Account", command= lambda:account_window())
+    account_page_button.place(x= 340,y=5)
+
+    adeposit_amount = Entry(third)
+    adeposit_amount.place(x=85,y=120)
+
+    awithdrawl_amount = Entry(third)
+    awithdrawl_amount.place(x=210,y=120)
+
+def Deposit(adeposit_amount):
+      deposit_amount = adeposit_amount.get()
+      cursor = connection.cursor()
+      deposit = (f"UPDATE user_account SET balance = balance + {deposit_amount} WHERE name = '{name.get()}' and password = '{password.get()}';")
+      cursor.execute(deposit)
+
+      connection.commit()
+      cursor.close()
+
+def Withdrawl(awithdrawl_amount):
+      withdrawl_amount = awithdrawl_amount.get()
+      cursor = connection.cursor()
+      withdrawl = (f"UPDATE user_account SET balance = balance - {withdrawl_amount} WHERE name = '{name.get()}' and password = '{password.get()}';")
+      cursor.execute(withdrawl)
+
+      connection.commit()
+      cursor.close()
+
+def account_window():
+    fourth = Toplevel()
+    fourth.title("Account Page")
+    fourth.geometry("400x300")
 
 
-connection = mysql.connector.connect(
-    user = 'root',
-    database = 'bank_account',
-    password = 'password'
-)
 
 
 
@@ -122,15 +171,7 @@ def table():
 
     cursor.close()
     
-def check_balance():
-    cursor = connection.cursor()
-    testQuery = (f"SELECT balance FROM user_account WHERE name = '{name}' and password = '{password}")
-    cursor.execute(testQuery)
 
-    for item in cursor:
-        print(item)
-    cursor.close()
-   
 def delete_account():
    cursor = connection.cursor()
    addData = (f"DELETE FROM user_account WHERE id >= 18")
@@ -138,25 +179,7 @@ def delete_account():
 
    connection.commit()
    cursor.close()
-   
-def Deposit():
-      cursor = connection.cursor()
-      deposit_amount = int(input("How much would you like to deposit"))
-      deposit = (f"UPDATE user_account SET balance = balance + {deposit_amount} WHERE name = '{name}';")
-      cursor.execute(deposit)
 
-      connection.commit()
-      cursor.close()
-   
-def Withdrawl():
-      cursor = connection.cursor()
-      withdrawl_amount = int(input("How much would you like to withdrawl"))
-      withdrawl = (f"UPDATE user_account SET balance = balance - {withdrawl_amount} WHERE name = '{name}';")
-      cursor.execute(withdrawl)
-
-      connection.commit()
-      cursor.close()
-      
 def Modifying_account():
     cursor = connection.cursor()
     mod_choice = input("Would you like to change your name, email, or password ")
