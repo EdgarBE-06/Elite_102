@@ -71,14 +71,7 @@ def create_account(abname, abemail, abpassword):
    connection.commit()
    cursor.close()
 
-def check_balance():
-    cursor = connection.cursor()
-    testQuery = (f"SELECT balance FROM user_account WHERE name = '{name.get()}' and password = '{password.get()}")
-    cursor.execute(testQuery)
 
-    for item in cursor:
-        print(item)
-    cursor.close()
    
 def create_main_page():
     third = Toplevel()
@@ -100,6 +93,20 @@ def create_main_page():
     awithdrawl_amount = Entry(third)
     awithdrawl_amount.place(x=210,y=120)
 
+
+    cursor = connection.cursor()
+    testQuery = (f"SELECT balance FROM user_account WHERE name = '{name.get()}' and password = '{password.get()}'")
+    cursor.execute(testQuery)
+    for item in cursor:
+        global balance
+        balance = item
+    connection.commit()
+    cursor.close()
+    global blabel
+    blabel = Entry(third)
+    blabel.place(x=185,y=40)
+    blabel.insert(END, balance)
+    
 def Deposit(adeposit_amount):
       deposit_amount = adeposit_amount.get()
       cursor = connection.cursor()
@@ -109,6 +116,19 @@ def Deposit(adeposit_amount):
       connection.commit()
       cursor.close()
 
+      cursor = connection.cursor()
+      testQuery = (f"SELECT balance FROM user_account WHERE name = '{name.get()}' and password = '{password.get()}'")
+      cursor.execute(testQuery)
+      for item in cursor:
+          global balance
+          balance = item
+      connection.commit()
+      cursor.close()
+      adeposit_amount.delete(0, 'end')
+      blabel.delete(0, 'end')
+      blabel.insert(END, balance)
+
+
 def Withdrawl(awithdrawl_amount):
       withdrawl_amount = awithdrawl_amount.get()
       cursor = connection.cursor()
@@ -117,6 +137,18 @@ def Withdrawl(awithdrawl_amount):
 
       connection.commit()
       cursor.close()
+
+      cursor = connection.cursor()
+      testQuery = (f"SELECT balance FROM user_account WHERE name = '{name.get()}' and password = '{password.get()}'")
+      cursor.execute(testQuery)
+      for item in cursor:
+          global balance
+          balance = item
+      connection.commit()
+      cursor.close()
+      awithdrawl_amount.delete(0, 'end')
+      blabel.delete(0, 'end')
+      blabel.insert(END, balance)
 
 def account_window():
     fourth = Toplevel()
