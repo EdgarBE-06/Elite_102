@@ -155,43 +155,32 @@ def account_window():
     fourth.title("Account Page")
     fourth.geometry("400x300")
 
+    lname_label =Label(fourth, text = "Name")
+    lname_label.place(x=115,y=75)
 
+    lname = Label(fourth, text = name.get())
+    lname.place(x=200,y=75)
 
+    lpassword_label =Label(fourth, text = "Password")
+    lpassword_label.place(x=115,y=100)
 
+    lpassword = Label(fourth, text = password.get())
+    lpassword.place(x=200,y=100)
 
-def main():
-      
-      login()
-      keep = 'Yes'
-      while keep == 'Yes':
-        choice = input("What would you like to do \n 1.Delete my account \n 2.Check acccount Balance \n 3.Make a Withdrawl \n 4.Make a Deposit \n 5.Modify Account ")
-      
-        if choice == '1':
-            print("delete")
-            delete_account()
-            keep = input("Would you like to continue")
-        elif choice == '2':
-            print("check")
-            check_balance()
-            keep = input("Would you like to continue")
-        elif choice == '3':
-            print("Withdrawl")
-            Withdrawl()
-            keep = input("Would you like to continue")
-        elif choice == '4':
-            print('Deposit')
-            Deposit()
-            keep = input("Would you like to continue")
-        elif choice == '5':
-           print("Modify")
-           Modifying_account()
-           keep = input("Would you like to continue")
-        else:
-          print("Table")
-          table()
-          keep = 'No'
-      print("Have a good Day")
-      table()
+    lemail_label = Label(fourth, text = "Email")
+    lemail_label.place(x= 115, y=125)
+
+    cursor = connection.cursor()
+    testQuery = (f"SELECT email FROM user_account WHERE name = '{name.get()}' and password = '{password.get()}'")
+    cursor.execute(testQuery)
+    for item in cursor:
+        global balance
+        email = item
+    connection.commit()
+    cursor.close()
+    lemail = Label(fourth, text = email)
+    lemail.place(x=200,y=125)
+
 
 def table():
     cursor = connection.cursor()
