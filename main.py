@@ -158,7 +158,7 @@ def account_window():
 
     global lname
     lname = Entry(fourth)
-    lname.place(x=200,y=75)
+    lname.place(x=175,y=75)
 
     confirm_name_button = Button(fourth, text = "Confirm", command = lambda: Modify_name(lname))
     confirm_name_button.place(x= 310,y= 75)
@@ -177,7 +177,7 @@ def account_window():
 
     global lpassword
     lpassword = Entry(fourth)
-    lpassword.place(x= 200, y= 100)
+    lpassword.place(x= 175, y= 100)
 
     confirm_password_button = Button(fourth, text = "Confirm", command = lambda: Modify_password(lpassword))
     confirm_password_button.place(x= 310, y= 100)
@@ -195,7 +195,7 @@ def account_window():
     lemail_label.place(x= 115, y=125)
 
     lemail = Entry(fourth)
-    lemail.place(x=200, y= 125)
+    lemail.place(x=175, y= 125)
     confirm_email_button = Button(fourth, text = "Confirm", command= lambda: Modify_email(lemail))
     confirm_email_button.place(x= 310, y= 125)
 
