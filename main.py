@@ -165,7 +165,7 @@ def account_window():
     lpassword_label.place(x=115,y=100)
 
     lpassword = Label(fourth, text = password.get())
-    lpassword.place(x=200,y=100)
+    lpassword.place(x=200, y=100)
 
     lemail_label = Label(fourth, text = "Email")
     lemail_label.place(x= 115, y=125)
@@ -179,7 +179,10 @@ def account_window():
     connection.commit()
     cursor.close()
     lemail = Label(fourth, text = email)
-    lemail.place(x=200,y=125)
+    lemail.place(x=200, y=125)
+
+    delete_account_button = Button(fourth, text= "Delete Account", command= lambda: delete_account())
+    delete_account_button.place(x=200, y=150)
 
 
 def table():
@@ -195,7 +198,7 @@ def table():
 
 def delete_account():
    cursor = connection.cursor()
-   addData = (f"DELETE FROM user_account WHERE id >= 18")
+   addData = (f"DELETE FROM user_account WHERE name = '{name.get()}' and password = '{password.get()}'")
    cursor.execute(addData)
 
    connection.commit()
