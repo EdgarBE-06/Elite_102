@@ -36,6 +36,7 @@ def login():
 
   window.mainloop()
 
+
 def create_account_window():
     second = Toplevel()
     second.title("Sign up page")
@@ -72,7 +73,6 @@ def create_account(abname, abemail, abpassword):
    cursor.close()
 
 
-   
 def create_main_page():
     third = Toplevel()
     third.title("Main Page")
@@ -93,6 +93,9 @@ def create_main_page():
     awithdrawl_amount = Entry(third)
     awithdrawl_amount.place(x=210,y=120)
 
+    global blabel
+    blabel = Entry(third)
+    blabel.place(x=185,y=40)
 
     cursor = connection.cursor()
     testQuery = (f"SELECT balance FROM user_account WHERE name = '{name.get()}' and password = '{password.get()}'")
@@ -102,9 +105,6 @@ def create_main_page():
         balance = item
     connection.commit()
     cursor.close()
-    global blabel
-    blabel = Entry(third)
-    blabel.place(x=185,y=40)
     blabel.insert(END, balance)
     
 def Deposit(adeposit_amount):
@@ -127,7 +127,6 @@ def Deposit(adeposit_amount):
       blabel.delete(0, 'end')
       blabel.insert(END, balance)
 
-
 def Withdrawl(awithdrawl_amount):
       cursor = connection.cursor()
       withdrawl = (f"UPDATE user_account SET balance = balance - {awithdrawl_amount.get()} WHERE name = '{name.get()}' and password = '{password.get()}';")
@@ -148,43 +147,107 @@ def Withdrawl(awithdrawl_amount):
       blabel.delete(0, 'end')
       blabel.insert(END, balance)
 
+
 def account_window():
     fourth = Toplevel()
     fourth.title("Account Page")
     fourth.geometry("400x300")
 
-    lname_label =Label(fourth, text = "Name")
+    lname_label = Label(fourth, text = "Name")
     lname_label.place(x=115,y=75)
 
-    lname = Label(fourth, text = name.get())
+    global lname
+    lname = Entry(fourth)
     lname.place(x=200,y=75)
+
+    confirm_name_button = Button(fourth, text = "Confirm", command = lambda: Modify_name(lname))
+    confirm_name_button.place(x= 310,y= 75)
+
+    cursor = connection.cursor()
+    testQuery = (f"SELECT name FROM user_account WHERE name = '{name.get()}' and password = '{password.get()}'")
+    cursor.execute(testQuery)
+    for item in cursor:
+        global alname
+        alname = item
+    connection.commit()
+    lname.insert(END, alname)
 
     lpassword_label = Label(fourth, text = "Password")
     lpassword_label.place(x=115,y=100)
 
-    lpassword = Label(fourth, text = password.get())
-    lpassword.place(x=200, y=100)
+    global lpassword
+    lpassword = Entry(fourth)
+    lpassword.place(x= 200, y= 100)
+
+    confirm_password_button = Button(fourth, text = "Confirm", command = lambda: Modify_password(lpassword))
+    confirm_password_button.place(x= 310, y= 100)
+
+    testQuery = (f"SELECT password FROM user_account WHERE name = '{name.get()}' and password = '{password.get()}'")
+    cursor.execute(testQuery)
+    for item in cursor:
+        global alpassword
+        alpassword = item
+    connection.commit()
+    lpassword.insert(END, alpassword)    
+
 
     lemail_label = Label(fourth, text = "Email")
     lemail_label.place(x= 115, y=125)
 
-    cursor = connection.cursor()
+    lemail = Entry(fourth)
+    lemail.place(x=200, y= 125)
+    confirm_email_button = Button(fourth, text = "Confirm", command= lambda: Modify_email(lemail))
+    confirm_email_button.place(x= 310, y= 125)
+
     testQuery = (f"SELECT email FROM user_account WHERE name = '{name.get()}' and password = '{password.get()}'")
     cursor.execute(testQuery)
     for item in cursor:
-        global email
-        email = item
+        global alemail
+        alemail = item
     connection.commit()
-    cursor.close()
-    lemail = Label(fourth, text = email)
-    lemail.place(x=200, y=125)
+    lemail.insert(END, alemail)
 
-    modify_account_button = Button(fourth, text= "Modify Account", command= lambda: Modifying_account_page())
-    modify_account_button.place(x=210, y=175)
+    cursor.close()
+    
 
     delete_account_button = Button(fourth, text= "Delete Account", command= lambda: delete_account())
     delete_account_button.place(x=115, y=175)
+  
+def delete_account():
+   cursor = connection.cursor()
+   addData = (f"DELETE FROM user_account WHERE name = '{name.get()}' and password = '{password.get()}'")
+   cursor.execute(addData)
 
+   connection.commit()
+   cursor.close()
+
+def Modify_name(lname):
+    cursor = connection.cursor()
+    name_change = (f"UPDATE user_account SET name = '{lname.get()}' WHERE name = '{name.get()}' and password = '{password.get()}'")
+    cursor.execute(name_change)
+    testQuery = (f"SELECT name FROM user_account WHERE name = '{name.get()}' and password = '{password.get()}'")
+    cursor.execute(testQuery)
+    for item in cursor:
+        global alname
+        alname = item
+    connection.commit()
+    connection.commit()
+    cursor.close()
+
+def Modify_password(lpassword):
+    cursor = connection.cursor()
+    password_change = (f"UPDATE user_account SET password = '{lpassword.get()}' WHERE name = '{name.get()}' and password = '{password.get()}'")
+    cursor.execute(password_change)
+    connection.commit()
+    cursor.close()
+
+def Modify_email(lemail):
+    cursor = connection.cursor()
+    email_change = (f"UPDATE user_account SET email = '{lemail.get()}' WHERE name = '{name.get()}' and password = '{password.get()}'")
+    cursor.execute(email_change)
+    connection.commit()
+    cursor.close()
+   
 
 def table():
     cursor = connection.cursor()
@@ -195,70 +258,5 @@ def table():
        print(item)
 
     cursor.close()
-    
-
-def delete_account():
-   cursor = connection.cursor()
-   addData = (f"DELETE FROM user_account WHERE name = '{name.get()}' and password = '{password.get()}'")
-   cursor.execute(addData)
-
-   connection.commit()
-   cursor.close()
-
-def Modifying_account_page():
-    fifth = Toplevel()
-    fifth.title("Modify Account")
-    fifth.geometry("400x300")
-
-    new_name_label = Label(fifth, text= "Name")
-    new_name_label.place(x= 115,y= 75)
-    new_name = Entry(fifth)
-    new_name.place(x= 150, y= 75)
-
-    confirm_name_button = Button(fifth, text = "Confirm", command = lambda: Modify_name(new_name))
-    confirm_name_button.place(x= 300,y= 75)
-
-
-    new_password_label = Label(fifth, text= "Password")
-    new_password_label.place(x= 115,y= 100)
-    new_password = Entry(fifth)
-    new_password.place(x= 150, y= 100)
-
-    confirm_password_button = Button(fifth, text = "Confirm", command = lambda: Modify_password(new_password))
-    confirm_password_button.place(x= 300, y= 100)
-
-
-    new_email_label = Label(fifth, text= "Email")
-    new_email_label.place(x= 115,y= 125)
-    new_email = Entry(fifth)
-    new_email.place(x= 150, y= 125)
-
-    confirm_email_button = Button(fifth, text = "Confirm", command= lambda: Modify_email(new_email))
-    confirm_email_button.place(x= 300, y= 125)
-
-def Modify_name(new_name):
-    cursor = connection.cursor()
-
-    name_change = (f"UPDATE user_account SET name = '{new_name.get()}' WHERE name = '{name.get()}' and password = '{password.get()}'")
-    cursor.execute(name_change)
-    connection.commit()
-    cursor.close()
-
-def Modify_password(new_password):
-    cursor = connection.cursor()
-    password_change = (f"UPDATE user_account SET password = '{new_password.get()}' WHERE name = '{name.get()}' and password = '{password.get()}'")
-    cursor.execute(password_change)
-    connection.commit()
-    cursor.close()
-
-def Modify_email(new_email):
-    cursor = connection.cursor()
-    email_change = (f"UPDATE user_account SET email = '{new_email.get()}' WHERE name = '{name.get()}' and password = '{password.get()}'")
-    cursor.execute(email_change)
-    connection.commit()
-    cursor.close()
-
-   
-
 login()
 table()
